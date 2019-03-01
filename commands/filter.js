@@ -8,6 +8,8 @@ module.exports.run = async (bot, message, args, origin) => {  // Runs when comma
 	if (!message.member.permissions.has(`MANAGE_MESSAGES`) || (!message.author.username == `AlexCheese`)) {
 		return `Missing 'Manage Messages' permission`;
 	}
+	let delay = (isNaN(args[0])) ? 0 : parseInt(args[0]);
+	console.log(delay);
 	let alreadyFiltered = bot.filters.has(message.channel.id);
 	if (alreadyFiltered) {
 		message.channel.send("OOC Filtering disabled in this channel.")
@@ -24,10 +26,10 @@ module.exports.run = async (bot, message, args, origin) => {  // Runs when comma
 				console.log(`Couldn't delete: ${error}`);
 				return `Some messages could not be deleted, probably because they are older than 14 days`;
 			});
-		message.channel.send("OOC Filtering enabled in this channel.")
+		message.channel.send((delay==0) ? "OOC Filtering enabled in this channel." : `OOC Filtering enabled in this channel (${delay}s)`)
 			.then(msg => msg.delete(5000));
 		let collector = new Discord.MessageCollector(message.channel, message => !message.content.startsWith('“') && !message.content.startsWith('*') && !message.content.startsWith('"') && !message.member.permissions.has(`MANAGE_MESSAGES`))
-		collector.on('collect', message => message.delete())
+		collector.on('collect', message => message.delete(delay*1000))
 		bot.filters.set(message.channel.id, collector);
 	}
 	return 0;
@@ -35,6 +37,6 @@ module.exports.run = async (bot, message, args, origin) => {  // Runs when comma
 
 module.exports.config = {  // Command info
 	name: 'filter',
-	usage: '>filter'
+	usage: '>filter (delay)'
 
 }
