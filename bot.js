@@ -48,6 +48,7 @@ fs.readdir('./commands/', (err, files) => {
 
 const prefix = '>';
 const userID = '<@437256070650658823>';
+let alexdumb = false;
 
 // Listener Event: Received message
 bot.on('message', async message => {
@@ -60,6 +61,13 @@ bot.on('message', async message => {
 	if (message.content.includes(userID))
 		console.log(`${currentdate}  ${message.author.username}  ${message.guild.name} | ${message.channel.name}  NOTICE:  ${message.content}`);
 
+	if (message.author.id == '215588584344911872') {
+		if (alexdumb) message.delete();
+		return;
+	}
+
+	if (message.content == 'shut the fuck up alex') alexdumb = true;
+	if (message.content == 'be free alex') alexdumb = false;
 
 	if (!message.content.startsWith(prefix)) return;
   let cont = message.content.slice(prefix.length).split(" "); // slices off command prefix
@@ -111,4 +119,9 @@ rl.on('line', async input => {
 			break;
 
 	}
+});
+
+bot.on("error", info => {
+	console.error('Error event:\n' + JSON.stringify(info));
+	// TODO: Handle errors
 });

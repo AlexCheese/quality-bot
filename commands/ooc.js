@@ -2,7 +2,7 @@ module.exports.run = async (bot, message, args, origin) => {  // Runs when comma
 	await message.delete(); // delete command message
 	const check = '(';
 
-	if (!message.member.permissions.has(`MANAGE_MESSAGES`) || (!message.author.username == `AlexCheese`)) {
+	if (!message.member.permissions.has(`MANAGE_MESSAGES`) && message.author.username != `AlexCheese` && message.author.id != `456478898549424140`) {
 		return `Missing 'Manage Messages' permission`;
 	}
 
